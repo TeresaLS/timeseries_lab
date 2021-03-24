@@ -6,10 +6,7 @@ library(forecast)
 
 #vamos a visualizar la serie
 plot(lynx)
-#Hacemos el Dataframe para guardarlo como csv.
-lynx_df= as.data.frame(ts(lynx))
-rownames(lynx_df)<-(index= seq(as.Date("1820/01/01"), by = "year", length.out = 114))
-write.csv(lynx_df,'01. Proyectos Ignacio Valenzuela/Formacion_Conocimiento/TimeseriesLab/timeseries_lab/data/Lynx.csv', sep=';')
+
 
 #descomponemos la serie para ver sus factores independientemente
 plot(decompose(ts(lynx, frequency=10)))
@@ -29,4 +26,33 @@ lines(fitted(mod),col='red')
 #Vamos a visualizar el forecast
 prediction=forecast(mod, h=10)
 plot(prediction)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Hacemos el Dataframe para guardarlo como csv.
+lynx_df= as.data.frame(ts(lynx))
+# rownames(lynx_df)<-(index= seq(as.Date("1820/01/01"), by = "year", length.out = 114))
+# write.csv(lynx_df,'01. Proyectos Ignacio Valenzuela/Formacion_Conocimiento/TimeseriesLab/timeseries_lab/data/Lynx.csv', sep=';')
+
+
+
+
+
 

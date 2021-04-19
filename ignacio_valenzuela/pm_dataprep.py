@@ -83,5 +83,20 @@ pm_weekly['log_wind'] = ts_transform(data=pm_weekly, ts_col='WIND_SPEED', fill_n
 pm_weekly['log_precipitation'] = ts_transform(data=pm_weekly, ts_col='PRECIPITAITON', fill_nan=True, log_transform=True)
 pm_weekly['log_cumprecipitation'] = ts_transform(data=pm_weekly, ts_col='COMMULATIVE_PRECIPITATION', fill_nan=True, log_transform=True)
 
+pm_daily = pm_daily.reset_index(drop=False)
+pm_daily['Date']=pm_daily['date']
+pm_daily['Day of Week'] = pd.to_datetime(pm_daily['date']).apply(lambda time: time.dayofweek)
+pm_daily['date'] = pm_daily['date'].map(str)
+pm_daily[['year', 'month', 'date']] = pm_daily['date'].str.split('-', expand=True)
+pm_daily['month'] = pm_daily['month'].map(int)
+
+pm_weekly = pm_weekly.reset_index(drop=False)
+pm_weekly['Date']=pm_weekly['date']
+pm_weekly['Day of Week'] = pd.to_datetime(pm_weekly['date']).apply(lambda time: time.dayofweek)
+pm_weekly['date'] = pm_weekly['date'].map(str)
+pm_weekly[['year', 'month', 'date']] = pm_weekly['date'].str.split('-', expand=True)
+pm_weekly['month'] = pm_weekly['month'].map(int)
+
+
 pm_daily.to_csv('timeseries_lab/ignacio_valenzuela/data/VDE_daily_madrid_pollution.csv')
 pm_weekly.to_csv('timeseries_lab/ignacio_valenzuela/data/VDE_weekly_madrid_pollution.csv')

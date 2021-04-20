@@ -11,6 +11,7 @@ Created on Sun Apr 18 11:32:34 2021
 import pandas as pd
 import numpy as np
 import pandas_profiling
+import datetime
 
 # Leyendo el conjunto de datos fuentes
 madrid_polution=pd.read_csv('C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/data/Madrid_polution_dataframe.csv', sep=',')
@@ -22,6 +23,13 @@ madrid_polution.info()
 
 #Creando la variable fecha, uniendo YEAR+MONTH+DAY
 madrid_polution['FECHA']= pd.to_datetime(madrid_polution[['YEAR', 'MONTH', 'DAY']])
+madrid_polution['DATE']=pd.to_datetime(madrid_polution[['YEAR', 'MONTH', 'DAY']])
+
+madrid_polution.dtypes
+
+madrid_polution['YM'] = madrid_polution['DATE'].dt.strftime('%Y-%m')
+
+
 
 madrid_polution.info()
 #Creando un index con la variable fecha
@@ -58,3 +66,30 @@ prof.to_file(output_file='C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_serie
 
 madrid_polution_diario_ts['FECHA'] = madrid_polution_diario_ts.index
 madrid_polution_diario_ts.to_csv('C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/jesus_pernalete/datos/madrid_polution_diario_ts.csv')
+
+
+
+madrid_polution_mes = madrid_polution.groupby('YM', as_index=False).agg(    
+                                            SEASON=('SEASON','min'), 
+                                            
+                                            PM_RETIRO= ('PM_RETIRO','mean'),
+                                            PM_VALLECAS= ('PM_VALLECAS','mean'),
+                                            PM_CIUDADLINEAL= ('PM_CIUDADLINEAL','mean'),
+                                            PM_CENTRO= ('PM_CENTRO','mean'),
+                                            
+                                            DEW_POINT= ('DEW_POINT','mean'),
+                                            HUMIDITY= ('HUMIDITY','mean'),
+                                            PREASSURE= ('PREASSURE','mean'),
+                                            TEMPERATURE= ('TEMPERATURE','mean'),
+                                            WIND_SPEED= ('WIND_SPEED','mean'),
+                                            COMMULATIVE_PRECIPITATION= ('COMMULATIVE_PRECIPITATION','max'))
+
+madrid_polution_mes_ts=madrid_polution_mes.fillna(0)
+madrid_polution_mes_ts['log_PM_CENTRO'] = np.log(madrid_polution_mes_ts.PM_CENTRO) 
+
+prof = ProfileReport(madrid_polution_mes_ts)
+prof.to_file(output_file='C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/jesus_pernalete/reportes/madrid_polution_mes_001.html')
+
+
+madrid_polution_mes_ts.to_csv('C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/jesus_pernalete/datos/madrid_polution_mes_ts.csv')
+

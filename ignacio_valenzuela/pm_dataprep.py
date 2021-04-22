@@ -42,6 +42,7 @@ def ts_transform(data, ts_col, date_col=None, fill_zeros=False, fill_nan=False, 
         if data[ts_col].isna().sum() != 0:
             print(data[ts_col].isna().sum(), ' values will be interpolated \n', 'Of a total of ', data[ts_col].shape[0])
             data[ts_col] = data[ts_col].interpolate()
+            print(data[ts_col].isna().sum(), ' Nan value remain')
         else:
             print('No NaN Values Found')
 
@@ -64,6 +65,27 @@ def ts_transform(data, ts_col, date_col=None, fill_zeros=False, fill_nan=False, 
         data.set_index([date_col], inplace=True)
         print('Index set as ', type(data.index))
     return data[ts_col]
+
+
+
+pm_daily['PM_CENTRO'] = ts_transform(data=pm_daily, ts_col='PM_CENTRO', fill_nan=True)
+pm_daily['DEW_POINT'] = ts_transform(data=pm_daily, ts_col='DEW_POINT', fill_nan=True)
+pm_daily['HUMIDITY'] = ts_transform(data=pm_daily, ts_col='HUMIDITY', fill_nan=True)
+pm_daily['TEMPERATURE'] = ts_transform(data=pm_daily, ts_col='TEMPERATURE', fill_nan=True)
+pm_daily['WIND_SPEED'] = ts_transform(data=pm_daily, ts_col='WIND_SPEED', fill_nan=True)
+pm_daily['PRECIPITAITON'] = ts_transform(data=pm_daily, ts_col='PRECIPITAITON', fill_nan=True)
+pm_daily['COMMULATIVE_PRECIPITATION'] = ts_transform(data=pm_daily, ts_col='COMMULATIVE_PRECIPITATION', fill_nan=True)
+
+
+pm_weekly['PM_CENTRO'] = ts_transform(data=pm_daily, ts_col='PM_CENTRO', fill_nan=True)
+pm_weekly['DEW_POINT'] = ts_transform(data=pm_daily, ts_col='DEW_POINT', fill_nan=True)
+pm_weekly['HUMIDITY'] = ts_transform(data=pm_daily, ts_col='HUMIDITY', fill_nan=True)
+pm_weekly['TEMPERATURE'] = ts_transform(data=pm_daily, ts_col='TEMPERATURE', fill_nan=True)
+pm_weekly['WIND_SPEED'] = ts_transform(data=pm_daily, ts_col='WIND_SPEED', fill_nan=True)
+pm_weekly['PRECIPITAITON'] = ts_transform(data=pm_daily, ts_col='PRECIPITAITON', fill_nan=True)
+pm_weekly['COMMULATIVE_PRECIPITATION'] = ts_transform(data=pm_daily, ts_col='COMMULATIVE_PRECIPITATION', fill_nan=True)
+
+
 
 
 pm_daily['log_pmcentro'] = ts_transform(data=pm_daily, ts_col='PM_CENTRO', fill_nan=True, log_transform=True)
@@ -96,6 +118,7 @@ pm_weekly['Day of Week'] = pd.to_datetime(pm_weekly['date']).apply(lambda time: 
 pm_weekly['date'] = pm_weekly['date'].map(str)
 pm_weekly[['year', 'month', 'date']] = pm_weekly['date'].str.split('-', expand=True)
 pm_weekly['month'] = pm_weekly['month'].map(int)
+
 
 
 pm_daily.to_csv('timeseries_lab/ignacio_valenzuela/data/VDE_daily_madrid_pollution.csv')

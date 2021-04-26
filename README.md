@@ -46,6 +46,10 @@ Laboratorio de Series Temporales para Tinámica
 
 
 
+## Vídeos de las sesiones pasadas
+Todas las sesiones son grabadas y se pueden ver en el canal de [Youtube](https://www.youtube.com/channel/UCwzfjoGbnFuRMUQk1doOAUw) del laboratorio. 
+
+
 ## Referencias 
 Las referencias se encuentran en orden creciente de dificultad. Hay más información basada en R que en Python actualmente, pero el código siempre es bastante replicable.
 1. [A Little Book of R For Time Series](https://buildmedia.readthedocs.org/media/pdf/a-little-book-of-r-for-time-series/latest/a-little-book-of-r-for-time-series.pdf) 

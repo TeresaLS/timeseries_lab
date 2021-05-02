@@ -57,6 +57,10 @@ Capítulo 2.
 2. [Forecasting: Practice and Principle de Rob Hyndman](https://otexts.com/fpp2/)  
 3. [Time Series Analysis and Its Applications with R Examples de Shumway y Stoffer](https://www.researchgate.net/publication/265365840_Time_Series_Analysis_and_Its_Applications_With_R_Examples) Este libro es muy técnico. Sirve principalmetne para los que quieran entrar en la matemtica de los modelos de series temporales.
 
+Además, hay vídeos recomendados para varios de los temas que se verán en el laboratorio.
+1. [¿Qué es una red LSTM?](https://www.youtube.com/watch?v=1BubAvTVBYs&ab_channel=codificandobits) tiene una explicación muy clara sobre el uso de LSTMs y qué las diferencia de las RNN
+2. [Programming LSTMs with Keras and Tensorflow (10.2)](https://www.youtube.com/watch?v=wY0dyFgNCgY&ab_channel=JeffHeaton) de Jeff Heaton entra más en el detalle de cómo implementar el código de keras.
+
 ## Paquetes y Software
 [RStudio](https://rstudio.com/products/rstudio/) R va a ser útil para algunas secciones del laboratorio, RStudio es el mejor IDE para esto.
 
@@ -67,4 +71,6 @@ Capítulo 2.
 [Git Bash](https://git-scm.com/downloads) Para los que no tengan git y estén cómodos utilizando la línea de comandos. 
 
 [Git Extensions](http://gitextensions.github.io/) Versión Open Source de git para los que quieran una interfaz gráfica. 
+
+[Google Colab](https://colab.research.google.com/notebooks/intro.ipynb#recent=true) es la herramienta que utilizaremos para la programación y entrenamiento de redes neuronales.
 

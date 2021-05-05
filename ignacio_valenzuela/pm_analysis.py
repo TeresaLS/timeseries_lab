@@ -231,8 +231,8 @@ def ts_seasonality(data, ts_col, periodicity, hue, savefig=False, outpath=None, 
 
         # series acf and pacf plots
         fig, axes = plt.subplots(2, 1, figsize=(15, 8))
-        plot_acf(data[ts_col], lags=50, ax=axes[0])
-        plot_pacf(data[ts_col], lags=50, ax=axes[1])
+        plot_acf(data[ts_col], lags=110, ax=axes[0])
+        plot_pacf(data[ts_col], lags=110, ax=axes[1])
         if name is not None:
             fig.savefig(outpath + str(name) + 'ACF_PACF.png')
         else:

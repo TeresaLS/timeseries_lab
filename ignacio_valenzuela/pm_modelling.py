@@ -547,29 +547,37 @@ This function performs a walkforward validation of the model. This means that th
 
         current_max_date = current_max_date + timedelta(days=step_size)
 
-
-
     return modelling_results
 
 
 
 # Lectura de los datos
 pm_daily=pd.read_csv(vde_path+'VDE_daily_madrid_pollution.csv', sep=",")
-pm_daily.set_index('date', inplace=True)
+pm_daily.set_index('Date', inplace=True)
 pm_weekly=pd.read_csv(vde_path+'VDE_weekly_madrid_pollution.csv', sep=",")
-pm_weekly.set_index('date', inplace=True)
+pm_weekly.set_index('Date', inplace=True)
 
 
-arima_model_params = dict(dependent_var_col='log_pmcentro', trend='n', p=1, d=1, q=1, P=0, D=0, Q=0, S=0, is_log=True, outpath=mod_report_path,
-                    name='pm_daily_arima111000', time_varying_regression=False,mle_regression=True,
-                    xreg=[],
-                    plot_regressors=False, periodicity=52)
+arima_model_params = dict(dependent_var_col='log_pmcentro', trend='n', p=1, d=1, q=2, P=0, D=0, Q=0, S=0, is_log=True, outpath=mod_report_path,
+                    name='pm_daily_log1120000_hum_pre', time_varying_regression=False,mle_regression=True,
+                    xreg=['log_humidity','COMMULATIVE_PRECIPITATION'],
+                    plot_regressors=True, periodicity=365)
 
 # Prophet Model
 prophet_model_params = dict(changepoints=None, n_changepoints=20, change_scale=0.5, dependent_var_col='PM_CENTRO', outpath=mod_report_path, name='pm_daily', freq='D',
                             reg_cols=[], country_iso_code='ES')
 
-walkforward_validation_params = dict(data=pm_daily, test_start_date='2015-11-01', test_end_date=None, step_size=15, testsize=15, model='sarimax')
+walkforward_validation_params = dict(data=pm_daily, test_start_date='2015-11-01', test_end_date=None, step_size=15, testsize=5, model='sarimax')
 
 walkforward_validation(**walkforward_validation_params)
+
+for p in [0,1,2,3]:
+    for d in [0,1,2]:
+        for q in [0,1,2]:
+            arima_model_params = dict(dependent_var_col='log_pmcentro', trend='n', p=p, d=d, q=q, P=0, D=0, Q=0, S=0, is_log=True, outpath=mod_report_path,
+                                      name='pm_daily_log5140000', time_varying_regression=False, mle_regression=True,
+                                      xreg=['log_humidity'],
+                                      plot_regressors=True, periodicity=365)
+            wfr=walkforward_validation(**walkforward_validation_params)
+            wfr.to_csv(mod_report_path+str(p)+str(d)+str(q)+'_'+str(wfr.MAPE.mean())+'.csv')
 

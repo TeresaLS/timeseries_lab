@@ -13,6 +13,9 @@ import numpy as np
 import pandas_profiling
 import datetime
 
+from dateutil.parser import parse
+
+
 # Leyendo el conjunto de datos fuentes
 madrid_polution=pd.read_csv('C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/data/Madrid_polution_dataframe.csv', sep=',')
 
@@ -29,6 +32,11 @@ madrid_polution.dtypes
 
 madrid_polution['YM'] = madrid_polution['DATE'].dt.strftime('%Y-%m')
 
+#Semana
+madrid_polution['Week'] = madrid_polution['DATE'].dt.week
+
+madrid_polution.dtypes
+
 
 
 madrid_polution.info()
@@ -36,6 +44,8 @@ madrid_polution.info()
 madrid_polution = madrid_polution.set_index('FECHA')
 madrid_polution.info()
 
+
+#data diaria
 
 madrid_polution_diario = madrid_polution.groupby('FECHA', as_index=True).agg(    
                                             SEASON=('SEASON','min'), 
@@ -68,6 +78,48 @@ madrid_polution_diario_ts['FECHA'] = madrid_polution_diario_ts.index
 madrid_polution_diario_ts.to_csv('C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/jesus_pernalete/datos/madrid_polution_diario_ts.csv')
 
 
+
+#data semanal
+
+madrid_polution_semana = madrid_polution.groupby(['YEAR','Week'], as_index=False).agg(    
+                                            SEASON=('SEASON','min'), 
+                                            
+                                            PM_RETIRO= ('PM_RETIRO','mean'),
+                                            PM_VALLECAS= ('PM_VALLECAS','mean'),
+                                            PM_CIUDADLINEAL= ('PM_CIUDADLINEAL','mean'),
+                                            PM_CENTRO= ('PM_CENTRO','mean'),
+                                            
+                                            DEW_POINT= ('DEW_POINT','mean'),
+                                            HUMIDITY= ('HUMIDITY','mean'),
+                                            PREASSURE= ('PREASSURE','mean'),
+                                            TEMPERATURE= ('TEMPERATURE','mean'),
+                                            WIND_SPEED= ('WIND_SPEED','mean'),
+                                            COMMULATIVE_PRECIPITATION= ('COMMULATIVE_PRECIPITATION','max'))
+
+#convertir YEAR + Week en fecha
+
+madrid_polution_semana['formatted_date'] = madrid_polution_semana.YEAR*1000 + madrid_polution_semana.Week* 10 + 0
+madrid_polution_semana['YearWeek'] = pd.to_datetime(madrid_polution_semana['formatted_date'], format='%Y%W%w')
+
+# Automatizar el análisis exploratorio de datos con Pandas-Profiling
+from pandas_profiling import ProfileReport
+
+prof = ProfileReport(madrid_polution_semana)
+prof.to_file(output_file='C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/jesus_pernalete/reportes/madrid_polution_semana_001.html')
+
+#Para trabajar las series de tiempo los valores missing los imputamos con 0
+madrid_polution_semana_ts=madrid_polution_semana.fillna(0)
+prof = ProfileReport(madrid_polution_semana_ts)
+prof.to_file(output_file='C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/jesus_pernalete/reportes/madrid_polution_semana_002.html')
+
+
+madrid_polution_semana_ts['YearWeek'] = madrid_polution_semana_ts.index
+madrid_polution_semana_ts.to_csv('C:/TINAMICA/TINAMICA_SPAIN/Laboratorios/Lab_time_series/GitHub_Repositorio/jesus_pernalete/datos/madrid_polution_semana_ts.csv')
+
+
+
+
+#data mensual
 
 madrid_polution_mes = madrid_polution.groupby('YM', as_index=False).agg(    
                                             SEASON=('SEASON','min'), 

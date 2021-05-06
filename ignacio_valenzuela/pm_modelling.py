@@ -366,7 +366,6 @@ trend, pdq and PDQS, are the statsmodels.SARIMAX variables.
 #                PROPHET MODEL                     #
 ####################################################
 
-
 def mod_prophet(train, test, dependent_var_col, outpath, name, changepoints=None, freq='D', n_changepoints=10, reg_cols=None, country_iso_code='ES', change_scale=0.05):
     """
 This function performs the training and testing of a prophet model and returns the main performance metrics
@@ -418,9 +417,9 @@ This function performs the training and testing of a prophet model and returns t
     else:
         tr_df = train[[dependent_var_col]].reset_index(drop=False)
 
-    if 'DATE' not in list(tr_df.columns):
+    if 'Date' not in list(tr_df.columns):
         tr_df.reset_index(drop=False, inplace=True)
-    tr_df = tr_df.rename(columns={'DATE': 'ds', 'index': 'ds', dependent_var_col: 'y'})
+    tr_df = tr_df.rename(columns={'Date':'ds', dependent_var_col: 'y'})
 
     print(tr_df.head())
     # fit the data
@@ -564,20 +563,20 @@ arima_model_params = dict(dependent_var_col='log_pmcentro', trend='n', p=1, d=1,
                     plot_regressors=True, periodicity=365)
 
 # Prophet Model
-prophet_model_params = dict(changepoints=None, n_changepoints=20, change_scale=0.5, dependent_var_col='PM_CENTRO', outpath=mod_report_path, name='pm_daily', freq='D',
-                            reg_cols=[], country_iso_code='ES')
+prophet_model_params = dict(changepoints=None, n_changepoints=30, change_scale=0.5, dependent_var_col='PM_CENTRO', outpath=mod_report_path, name='prophet_pm_daily', freq='D',
+                            reg_cols=None, country_iso_code='CN')
 
-walkforward_validation_params = dict(data=pm_daily, test_start_date='2015-11-01', test_end_date=None, step_size=15, testsize=5, model='sarimax')
+walkforward_validation_params = dict(data=pm_daily, test_start_date='2015-11-01', test_end_date=None, step_size=15, testsize=5, model='prophet')
 
 walkforward_validation(**walkforward_validation_params)
 
-for p in [0,1,2,3]:
-    for d in [0,1,2]:
-        for q in [0,1,2]:
-            arima_model_params = dict(dependent_var_col='log_pmcentro', trend='n', p=p, d=d, q=q, P=0, D=0, Q=0, S=0, is_log=True, outpath=mod_report_path,
-                                      name='pm_daily_log5140000', time_varying_regression=False, mle_regression=True,
-                                      xreg=['log_humidity'],
-                                      plot_regressors=True, periodicity=365)
-            wfr=walkforward_validation(**walkforward_validation_params)
-            wfr.to_csv(mod_report_path+str(p)+str(d)+str(q)+'_'+str(wfr.MAPE.mean())+'.csv')
+# for p in [0,1,2,3]:
+#     for d in [0,1,2]:
+#         for q in [0,1,2]:
+#             arima_model_params = dict(dependent_var_col='log_pmcentro', trend='n', p=p, d=d, q=q, P=0, D=0, Q=0, S=0, is_log=True, outpath=mod_report_path,
+#                                       name='pm_daily_log5140000', time_varying_regression=False, mle_regression=True,
+#                                       xreg=['log_humidity'],
+#                                       plot_regressors=True, periodicity=365)
+#             wfr=walkforward_validation(**walkforward_validation_params)
+#             wfr.to_csv(mod_report_path+str(p)+str(d)+str(q)+'_'+str(wfr.MAPE.mean())+'.csv')
 

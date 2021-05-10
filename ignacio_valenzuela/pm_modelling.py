@@ -563,7 +563,7 @@ arima_model_params = dict(dependent_var_col='log_pmcentro', trend='n', p=1, d=1,
                     plot_regressors=True, periodicity=365)
 
 # Prophet Model
-prophet_model_params = dict(changepoints=None, n_changepoints=30, change_scale=0.5, dependent_var_col='PM_CENTRO', outpath=mod_report_path, name='prophet_pm_daily', freq='D',
+prophet_model_params = dict(changepoints=None, n_changepoints=30, change_scale=0.5, dependent_var_col='log_pmcentro', outpath=mod_report_path, name='prophet_log_pm_daily', freq='D',
                             reg_cols=None, country_iso_code='CN')
 
 walkforward_validation_params = dict(data=pm_daily, test_start_date='2015-11-01', test_end_date=None, step_size=15, testsize=5, model='prophet')
